@@ -1,11 +1,13 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, Modal, Pressable, Image } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, Modal, Pressable, Image, FlatList } from 'react-native';
+
 
 export default function App() {
   const [currentGoal,setcurrentGoal]=useState('');
-  const[listOfGoals,setlistOfGoals]=useState([]);
+  const[listOfGoals,setlistOfGoals]=useState("");
   const [ModalStatus,setModalStatus]=useState(false);
+  
   
   const handleText=(text) =>{
     setcurrentGoal(text);
@@ -16,7 +18,7 @@ export default function App() {
   }
 
   const handleAdd=()=>{
-    setlistOfGoals([...listOfGoals,currentGoal]);
+    setlistOfGoals([...listOfGoals,{text:currentGoal, id: Math.random().toString()}]);
     setcurrentGoal('');
     setModalStatus(false);
   }
@@ -30,34 +32,47 @@ export default function App() {
     setModalStatus(true);
   }
 
+  const handlePress=(id)=>{
+    setlistOfGoals((listOfGoals)=>{
+      return listOfGoals.filter((goal)=>goal.id!==id);
+    })
+  }
+
   
   return (
-    <View style={styles.appContainer}>
+    <><View style={styles.appContainer}>
       <Image style={styles.image} source={require('/Users/jaswantthpotluri/Desktop/react native/hello/assets/images/goal.png')} />
       <View style={styles.addButton}>
-        <Button title='Add a Goal' onPress={handleAddGoal}/>
-        <Button title='Clear All' onPress={handleClearGoals}/>
+        <Button title='Add a Goal' onPress={handleAddGoal} />
+        <Button title='Clear All' onPress={handleClearGoals} />
       </View>
       {ModalStatus && <Modal animationType='slide'>
         <View style={styles.addGoals}>
-        <TextInput style={styles.TextInput} placeholder='enter your goal' onChangeText={handleText} value={currentGoal}/>
-        <Button title='Add' onPress={handleAdd}/>
-        <Button title='Cancel' onPress={handleCancel}/>
+          <TextInput style={styles.TextInput} placeholder='enter your goal' onChangeText={handleText} value={currentGoal} />
+          <Button title='Add' onPress={handleAdd} />
+          <Button title='Cancel' onPress={handleCancel} />
         </View>
       </Modal>}
-    
+
       <View style={styles.goalsContainer}>
-        {listOfGoals.length!=0 && <Text>Your goals are:</Text>}
-          <ScrollView>
-            {listOfGoals.map((goal) => 
-              <View style={styles.goalItem} key={goal}>
-                <Text>{goal}</Text>
-              </View>)}
-          </ScrollView>
-      </View>
-    
-      <StatusBar style="auto" />
-    </View>
+        {listOfGoals.length != 0 && <Text>Your goals are:</Text>}
+        
+          <FlatList data={listOfGoals}
+            renderItem={(goal) => {
+              return(
+              <Pressable onPress={handlePress.bind(this,goal.item.id)}>
+                <View style={styles.goalItem}>
+                  <Text>{goal.item.text}</Text>
+                </View>
+              </Pressable>
+              );
+            } }
+            keyExtractor={(item,index)=>{return item.id}} 
+          />
+
+        
+    </View><StatusBar style="auto" /></View>
+  </>
   );
 }
 
