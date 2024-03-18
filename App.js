@@ -1,38 +1,39 @@
 import { useState } from 'react';
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button, TextInput, ScrollView, Modal, Pressable } from 'react-native';
+import { StyleSheet, Text, View, Button, TextInput, ScrollView, Modal, Pressable, Image } from 'react-native';
 
 export default function App() {
   const [currentGoal,setcurrentGoal]=useState('');
   const[listOfGoals,setlistOfGoals]=useState([]);
   const [ModalStatus,setModalStatus]=useState(false);
   
-  function handleText(text){
+  const handleText=(text) =>{
     setcurrentGoal(text);
   }
 
-  function handleCancel(){
+  const handleCancel=()=>{
     setModalStatus(false);
   }
 
-  function handleAdd(){
+  const handleAdd=()=>{
     setlistOfGoals([...listOfGoals,currentGoal]);
     setcurrentGoal('');
     setModalStatus(false);
   }
 
-  function handleClearGoals(){
+  const handleClearGoals=()=>{
     setlistOfGoals([]);
     setModalStatus(false);
   }
 
-  function handleAddGoal(){
+  const handleAddGoal=()=>{
     setModalStatus(true);
   }
 
   
   return (
     <View style={styles.appContainer}>
+      
       <View style={styles.addButton}>
         <Button title='Add a Goal' onPress={handleAddGoal}/>
         <Button title='Clear All' onPress={handleClearGoals}/>
@@ -95,7 +96,8 @@ const styles = StyleSheet.create({
   
   },
   addButton:{
-    padding:100,
+    flex:1,
+    padding:10,
     flexDirection:'row',
     justifyContent:'center'
   }
