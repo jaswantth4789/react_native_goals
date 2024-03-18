@@ -33,12 +33,12 @@ export default function App() {
   
   return (
     <View style={styles.appContainer}>
-      
+      <Image style={styles.image} source={require('/Users/jaswantthpotluri/Desktop/react native/hello/assets/images/goal.png')} />
       <View style={styles.addButton}>
         <Button title='Add a Goal' onPress={handleAddGoal}/>
         <Button title='Clear All' onPress={handleClearGoals}/>
       </View>
-      {ModalStatus && <Modal>
+      {ModalStatus && <Modal animationType='slide'>
         <View style={styles.addGoals}>
         <TextInput style={styles.TextInput} placeholder='enter your goal' onChangeText={handleText} value={currentGoal}/>
         <Button title='Add' onPress={handleAdd}/>
@@ -67,6 +67,11 @@ const styles = StyleSheet.create({
     flex:1,
     padding:50,
     backgroundColor:'lightblue'
+  },
+  image: {
+    width:'100%',
+    height:'30%',
+    padding:20
   },
   addGoals: {
     flex:2,
